@@ -13,7 +13,7 @@
 #include "StereoCamera.hpp"
 
 void depthPrint(int event, int x, int y, int flags, void *userData);
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr matToPoinXYZRGB(cv::Mat frameXYZ, cv::Mat frame);
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr matToPointXYZRGB(cv::Mat frameXYZ, cv::Mat frame);
 
 int main() {
   const bool ALREADY_CAPTURED = true;
@@ -150,7 +150,7 @@ int main() {
     std::cout << " Total: " << total_ms << std::endl;
 
 /*
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr pointCloud = matToPoinXYZRGB(XYZ, frames.at(1));
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr pointCloud = matToPointXYZRGB(XYZ, frames.at(1));
     pcl::io::savePCDFileASCII<pcl::PointXYZRGB>("/tmp/test_pcd_" + std::to_string(i++) + ".pcd", *pointCloud.get());
 */
 
@@ -167,8 +167,7 @@ int main() {
   return 0;
 }
 
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr matToPoinXYZRGB(cv::Mat frameXYZ, cv::Mat frame) {
-
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr matToPointXYZRGB(cv::Mat frameXYZ, cv::Mat frame) {
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud_ptr(new pcl::PointCloud<pcl::PointXYZRGB>);
 
   auto height = (uint32_t) frame.rows;
@@ -186,10 +185,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr matToPoinXYZRGB(cv::Mat frameXYZ, cv::Mat
       uchar blue = intensity.val[0];
       uchar green = intensity.val[1];
       uchar red = intensity.val[2];
-      uint32_t rgb = (
-          static_cast<uint32_t>(red) << 16 |
-              static_cast<uint32_t>(green) << 8 |
-              static_cast<uint32_t>(blue));
+      uint32_t rgb = (static_cast<uint32_t>(red) << 16 | static_cast<uint32_t>(green) << 8 | static_cast<uint32_t>(blue));
       point.rgb = *reinterpret_cast<float *>(&rgb);
 
       point_cloud_ptr->points.push_back(point);
@@ -200,7 +196,6 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr matToPoinXYZRGB(cv::Mat frameXYZ, cv::Mat
   point_cloud_ptr->height = height;
 
   return point_cloud_ptr;
-
 }
 
 void depthPrint(int event, int x, int y, int flags, void *userData) {

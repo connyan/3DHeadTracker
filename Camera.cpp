@@ -36,7 +36,7 @@ Camera::~Camera() {
 	}
 }
 
-bool Camera::readFrame() {
+void Camera::readFrame() {
 	using Clock = std::chrono::steady_clock;
 	isRunning.set_value(true);
 

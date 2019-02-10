@@ -42,7 +42,7 @@ public:
 	Camera(std::pair<int, std::string> id, int width, int height, int fps);
 	~Camera();
 
-	bool readFrame();
+	void readFrame();
 	cv::Mat getFrame();
 	cv::Mat getFrameRemapped();
 

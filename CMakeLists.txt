@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 find_package( OpenCV REQUIRED )
 find_package( Threads REQUIRED )
-find_package( Boost REQUIRED COMPONENTS SYSTEM)
+find_package( Boost REQUIRED COMPONENTS)
 find_package( PCL 1.8 REQUIRED )
 include_directories(${PCL_INCLUDE_DIRS})
 
