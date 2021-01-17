@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include <opencv/cv.hpp>
+#include <opencv2/opencv.hpp>
 
 #include "Camera.hpp"
 
@@ -121,10 +121,10 @@ void Camera::captureCalibrationPoints(bool alreadyCaptured) {
 void Camera::findChessboard(std::vector<cv::Point2f> &imageCorners, cv::Mat &frame, bool showImage) {
 	cv::Mat gray;
 	cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
-	bool patternFound = findChessboardCorners(gray, boardSize, imageCorners, CV_CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_NORMALIZE_IMAGE | CV_CALIB_CB_FAST_CHECK);
+	bool patternFound = findChessboardCorners(gray, boardSize, imageCorners, cv::CALIB_CB_ADAPTIVE_THRESH | cv::CALIB_CB_NORMALIZE_IMAGE | cv::CALIB_CB_FAST_CHECK);
 	std::cout << "Pattern frame found " << patternFound << std::endl;
 	if(patternFound) {
-		cornerSubPix(gray, imageCorners, cv::Size{11, 11}, cv::Size{-1, -1}, cv::TermCriteria{CV_TERMCRIT_EPS | CV_TERMCRIT_ITER, 30, 0.1});
+		cornerSubPix(gray, imageCorners, cv::Size{11, 11}, cv::Size{-1, -1}, cv::TermCriteria{cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 30, 0.1});
 	}
 	if (showImage) {
 		drawChessboardCorners(gray, boardSize, cv::Mat{imageCorners}, patternFound);
@@ -133,7 +133,7 @@ void Camera::findChessboard(std::vector<cv::Point2f> &imageCorners, cv::Mat &fra
 }
 
 double Camera::calibrateCamera() {
-	double error = cv::calibrateCamera(realCornerVector, imageCornerVector, captureSize, cameraMatrix, distCoeffs, rvecs, tvecs, CV_CALIB_ZERO_TANGENT_DIST);
+	double error = cv::calibrateCamera(realCornerVector, imageCornerVector, captureSize, cameraMatrix, distCoeffs, rvecs, tvecs, cv::CALIB_ZERO_TANGENT_DIST);
 	 std::cout << "Calibration matrices calculated for " + name + " camera with error: " << error << std::endl;
 	 std::cout << "CM " << cameraMatrix << std::endl;
 	 std::cout << "D " << distCoeffs << std::endl;
@@ -149,7 +149,7 @@ void Camera::initDistortRectifyMap(cv::Mat R, cv::Mat P) {
 }
 
 cv::Mat Camera::getFrameRemapped() {
-	remap(getFrame(), undistortedFrameData, map1, map2, CV_INTER_CUBIC, cv::BORDER_CONSTANT, 0);
+	remap(getFrame(), undistortedFrameData, map1, map2, cv::INTER_CUBIC, cv::BORDER_CONSTANT, 0);
 	return undistortedFrameData;
 }
 

@@ -2,7 +2,7 @@
 #include <chrono>
 #include <opencv2/highgui.hpp>
 #include <opencv2/ximgproc.hpp>
-#include <cv.hpp>
+#include <opencv2/opencv.hpp>
 #include <pcl/io/pcd_io.h>
 
 #include <fcntl.h>
